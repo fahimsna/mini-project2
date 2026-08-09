@@ -66,11 +66,28 @@ let loginUser = async (req, res) => {
   }
 };
 let getProfile = async (req, res) => {
-  res.status(200).json({
-    status: 1,
-    message: "Profile Accessed Successfully",
-    user: req.name,
-  });
+  try {
+    let user = await User.findById(req.name.id);
+
+    if (!user) {
+      return res.status(404).json({
+        status: 0,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      status: 1,
+      message: "Profile Accessed Successfully",
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 0,
+      message: "Failed to get profile",
+      error,
+    });
+  }
 };
 
-module.exports = { registerUser, loginUser,getProfile };
+module.exports = { registerUser, loginUser, getProfile };
