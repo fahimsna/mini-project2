@@ -1,5 +1,6 @@
 let User = require("../models/User");
 let bcrypt = require("bcrypt");
+let jwt = require("jsonwebtoken");
 let registerUser = async (req, res) => {
   try {
     let data = req.body;
@@ -18,7 +19,7 @@ let registerUser = async (req, res) => {
 
     res.status(201).json({
       status: 1,
-      message: "Data Inserted Successfully",
+      message: "Regisgtration Successful",
       result,
     });
   } catch (error) {
@@ -48,9 +49,13 @@ let loginUser = async (req, res) => {
         message: "Invalid Password",
       });
     }
+    let token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
     res.status(200).json({
       status: 1,
-      message: "Successfully Loged in",
+      message: "Successfully Logged in",
+      token,
     });
   } catch (error) {
     res.status(500).json({
