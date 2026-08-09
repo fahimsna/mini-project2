@@ -1,11 +1,12 @@
 let express = require("express");
 let mongoose = require("mongoose");
-const registerUser = require("./controllers/userController");
+const {registerUser,loginUser} = require("./controllers/userController");
 let userRoutes = require("./routes/userRoutes");
 let app = express();
 require("dotenv").config();
 app.use(express.json());
 app.post("/api/users/register", registerUser);
+app.post("/api/users/login",loginUser);
 
 mongoose
   .connect(process.env.DBURL)
