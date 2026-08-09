@@ -65,5 +65,12 @@ let loginUser = async (req, res) => {
     });
   }
 };
+let getProfile = async (req, res) => {
+  res.status(200).json({
+    status: 1,
+    message: "Profile Accessed Successfully",
+    user: req.name,
+  });
+};
 
-module.exports = { registerUser, loginUser };
+module.exports = { registerUser, loginUser,getProfile };
