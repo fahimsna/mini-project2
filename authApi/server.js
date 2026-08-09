@@ -1,15 +1,12 @@
 let express = require("express");
 let mongoose = require("mongoose");
+const registerUser = require("./controllers/userController");
+let userRoutes = require("./routes/userRoutes");
 let app = express();
 require("dotenv").config();
 app.use(express.json());
+app.post("/api/users/register", registerUser);
 
-app.get("/api/test", (req, res) => {
-  res.send({
-    status: 1,
-    message: "Auth is Working",
-  });
-});
 mongoose
   .connect(process.env.DBURL)
   .then(() => {
