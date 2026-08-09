@@ -16,7 +16,7 @@ let registerUser = async (req, res) => {
     let user = new User(data);
     let result = await user.save();
 
-    res.send({
+    res.status(201).json({
       status: 1,
       message: "Data Inserted Successfully",
       result,
@@ -35,6 +35,23 @@ let loginUser = async (req, res) => {
     let user = await User.findOne({
       email: data.email,
     });
+    if (!user) {
+      return res.status(404).json({
+        status: 0,
+        message: "User not found",
+      });
+    }
+    let passMatch = await bcrypt.compare(data.password, user.password);
+    if (!passMatch) {
+      return res.status(401).json({
+        status: 0,
+        message: "Invalid Password",
+      });
+    }
+    res.status(200).json({
+      status: 1,
+      message: "Successfully Loged in",
+    });
   } catch (error) {
     res.status(500).json({
       status: 0,
@@ -44,4 +61,4 @@ let loginUser = async (req, res) => {
   }
 };
 
-module.exports = {registerUser,loginUser};
+module.exports = { registerUser, loginUser };
