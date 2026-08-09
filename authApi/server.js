@@ -1,5 +1,7 @@
 let express = require("express");
+let mongoose = require("mongoose");
 let app = express();
+require("dotenv").config();
 app.use(express.json());
 
 app.get("/api/test", (req, res) => {
@@ -8,7 +10,15 @@ app.get("/api/test", (req, res) => {
     message: "Auth is Working",
   });
 });
+mongoose
+  .connect(process.env.DBURL)
+  .then(() => {
+    console.log("MongoDB connected");
+  })
+  .catch((error) => {
+    console.log("MongoDB connection error:", error);
+  });
 
-app.listen(8006, () => {
-  console.log("Server is running on Port 8006");
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on Port ${process.env.PORT}`);
 });
