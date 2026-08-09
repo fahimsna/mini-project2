@@ -169,6 +169,29 @@ let changePassword = async (req, res) => {
     });
   }
 };
+let deleteProfile = async (req, res) => {
+  try {
+    let user = await User.findByIdAndDelete(req.name.id);
+
+    if (!user) {
+      return res.status(404).json({
+        status: 0,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      status: 1,
+      message: "Account Deleted Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 0,
+      message: "Failed to delete account",
+      error,
+    });
+  }
+};
 module.exports = {
   registerUser,
   loginUser,
@@ -176,4 +199,5 @@ module.exports = {
   adminDashboard,
   updateProfile,
   changePassword,
+  deleteProfile,
 };
