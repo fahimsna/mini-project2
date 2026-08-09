@@ -131,4 +131,49 @@ let updateProfile = async (req, res) => {
     });
   }
 };
-module.exports = { registerUser, loginUser, getProfile, adminDashboard ,updateProfile};
+let changePassword = async (req, res) => {
+  try {
+    let data = req.body;
+
+    let user = await User.findById(req.name.id);
+
+    if (!user) {
+      return res.status(404).json({
+        status: 0,
+        message: "User not found",
+      });
+    }
+
+    let passMatch = await bcrypt.compare(data.currentPassword, user.password);
+
+    if (!passMatch) {
+      return res.status(401).json({
+        status: 0,
+        message: "Current password is incorrect",
+      });
+    }
+
+    user.password = await bcrypt.hash(data.newPassword, 10);
+
+    await user.save();
+
+    res.status(200).json({
+      status: 1,
+      message: "Password Changed Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 0,
+      message: "Failed to change password",
+      error,
+    });
+  }
+};
+module.exports = {
+  registerUser,
+  loginUser,
+  getProfile,
+  adminDashboard,
+  updateProfile,
+  changePassword,
+};
