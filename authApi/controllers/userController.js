@@ -29,5 +29,19 @@ let registerUser = async (req, res) => {
     });
   }
 };
+let loginUser = async (req, res) => {
+  try {
+    let data = req.body;
+    let user = await User.findOne({
+      email: data.email,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 0,
+      message: "Failed to login",
+      error,
+    });
+  }
+};
 
-module.exports = registerUser;
+module.exports = {registerUser,loginUser};
